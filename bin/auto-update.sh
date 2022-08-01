@@ -45,7 +45,7 @@ echo "MODELNAME: $MODELNAME"
 
 opkg update
 opkg install libustream-openssl
-CURRENT_VERSION="$(wget --no-check-certificate -q https://downloads.openwrt.org/releases/ -O - | grep -E "<a href=\"[0-9]+.[0-9]+.[0-9]+$rc_regex/\">" | awk -F '</a>' '{print $1}' | awk -F '>' '{print $(NF)}' | sort -n -r | head -1)"
+CURRENT_VERSION="$(wget --no-check-certificate -q https://github.com/lylus/OpenWrt-Firmware/releases -O - | grep -E "<a href=\"[0-9]+.[0-9]+.[0-9]+$rc_regex/\">" | awk -F '</a>' '{print $1}' | awk -F '>' '{print $(NF)}' | sort -n -r | head -1)"
 # shellcheck disable=SC2181
 if [ "$?" != "0" ]; then
   echo "wget error"
@@ -75,7 +75,7 @@ if echo "$CURRENT_VERSION" | grep -Eq '^[2-9]'; then
 fi
 
 FILENAME="openwrt-$CURRENT_VERSION-$(echo "$OPENWRT_BOARD" | tr '/' '-')-$MODEL-squashfs-sysupgrade.bin"
-BASE_LINK="https://downloads.openwrt.org/releases/$CURRENT_VERSION/targets/$(echo "$OPENWRT_BOARD" | tr '-' '/')/"
+BASE_LINK="https://github.com/lylus/OpenWrt-Firmware/releases/$CURRENT_VERSION/targets/$(echo "$OPENWRT_BOARD" | tr '-' '/')/"
 SHA256SUMS=$(wget --no-check-certificate "$BASE_LINK/sha256sums" -q -O - | grep "$FILENAME" | awk '{print $1}')
 TARGET_PATH="/tmp/$FILENAME"
 wget --no-check-certificate "$BASE_LINK$FILENAME" -O "$TARGET_PATH"
